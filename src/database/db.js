@@ -1,4 +1,4 @@
-const mongoose = require(`mongoose`);
+import mongoose from "mongoose";
 
 const connectDatabase = () => {
     console.log("Wait connecting to the database");
@@ -12,4 +12,4 @@ const connectDatabase = () => {
     .catch((error) => console.log(error)) //Como estou usando um código assícrono vou usar o then (caso funcionar) e o catch (caso não funcione)
 };
 
-module.exports = connectDatabase;
+export default connectDatabase;
