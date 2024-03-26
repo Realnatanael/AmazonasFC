@@ -1,4 +1,4 @@
-import {createService, findAllService, countNews, topNewsService, findByIdService, searchByTitleService, byUserService} from "../services/news.services.js"
+import {createService, findAllService, countNews, topNewsService, findByIdService, searchByTitleService, byUserService, updateService} from "../services/news.services.js"
 
 export const create = async (req, res) => {
     try {
@@ -173,5 +173,32 @@ export const byUser = async (req,res) => {
         });
     } catch (err){
         res.status(500).send({message: err.message});
+    }
+}
+
+export const update = async(req, res) => {
+    try {
+        const {title, text, banner} = req.body;
+        const {id} = req.params;
+
+        if (!title && !banner && !text) {
+            res.status(400).send({
+                message: "Submit at least one field to update the post",
+            })
+        }
+
+        const news = await findByIdService(id);
+
+        if(news.user._id != req.userId){ //lembrando que um é objeto e o outro é string por isso não uso !==
+            return res.status(400).send({
+                message: "You didn't update this post"
+            })
+        }
+
+        await updateService(id, title, text, banner);
+
+        return res.send({message: "Post successfully updated!"})
+    } catch (err){
+        res.status(500).send({message:err.message});
     }
 }
