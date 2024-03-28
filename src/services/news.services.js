@@ -19,3 +19,12 @@ export const byUserService = (id) => News.find({user: id}).sort({_id: -1}).popul
 export const updateService = (id, title, text, banner) => News.findOneAndUpdate({_id: id}, {title, text, banner}, {rawResult: true,});
 
 export const eraseService = (id) => News.findByIdAndDelete({_id: id});
+
+export const likeNewsService = (idNews, userId) => News.findOneAndUpdate(
+    {_id: idNews, "likes.userId": {$nin: [userId]}}, 
+    {$push: {likes: {userId, created: new Date()}}}
+);
+
+export const deleteLikeNewsService = (idNews, userId) => News.findOneAndUpdate(
+    {_id: idNews}, {$pull: {likes: {userId}}}
+);
