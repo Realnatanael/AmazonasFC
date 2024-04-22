@@ -121,6 +121,10 @@ export const findById = async(req, res) => {
 
         const news = await findByIdService(id);
 
+        if (!news) {
+            return res.status(404).send({message: "News not found"});
+        }
+
         return res.send({
             news: {
                 id: news._id,
