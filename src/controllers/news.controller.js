@@ -118,12 +118,15 @@ export const topNews = async (req, res) => {
 export const findById = async(req, res) => {
     try{
         const {id} = req.params;
+        const userId = req.userId;
 
         const news = await findByIdService(id);
 
         if (!news) {
             return res.status(404).send({message: "News not found"});
         }
+
+        const liked = news.likes.includes(userId);
 
         return res.send({
             news: {
@@ -136,7 +139,8 @@ export const findById = async(req, res) => {
                 name: news.user.name,
                 username: news.user.username,
                 userAvatar: news.user.avatar, 
-               },
+                liked: liked,
+            },
         });
     } catch (err){
         res.status(500).send({message: err.message});
@@ -241,18 +245,19 @@ export const erase = async (req, res) => {
     }
 }
 
-export const likeNews =async (req, res) => {
-    try{
-    const {id} = req.params;
-    const userId = req.userId;
+export const likeNews = async (req, res) => {
+    try {
+        const {id} = req.params;
+        const userId = req.userId;
 
-    const newsLiked = await likeNewsService(id, userId);
-    if(!newsLiked){
-        await deleteLikeNewsService(id, userId);
-        return res.status(200).send({message: "Like successfully removed"});
-    }
+        const newsLiked = await likeNewsService(id, userId);
+        if(!newsLiked){
+            await deleteLikeNewsService(id, userId);
+            return res.status(200).send({message: "Like successfully removed", liked: false});
+        }
 
-    res.send({message: "Like done successfully"})}catch (err){
+        res.send({message: "Like done successfully", liked: true});
+    } catch (err) {
         res.status(500).send({message:err.message});  
     }
 }
