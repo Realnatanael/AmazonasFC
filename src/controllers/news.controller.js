@@ -13,6 +13,7 @@ import {
     addCommentService,
     deleteCommentService
 } from "../services/news.services.js"
+import News from '../models/news.js'
 
 export const create = async (req, res) => {
     try {
@@ -288,20 +289,21 @@ export const deleteComment = async (req, res) => {
         const {idNews, idComment} = req.params;
         const userId = req.userId;
 
-        const commentDeleted = await deleteCommentService(idNews, idComment, userId);
+        const news = await News.findById(idNews);
+        const comment = news.comments.find(comment => comment.idComment === idComment);
 
-       const commentFinder = commentDeleted.comments.find((comment) => comment.idComment === idComment)
-
-       if(!commentFinder){
-        return res.status(404).send({message:"Comment not found"})
-    }
-
-        if(commentFinder.userId !== userId){
-            return res.status(400).send({message:"You can't delete this comment"})
+        if (!comment) {
+            return res.status(404).send({message:"Comment not found"});
         }
 
+        if (String(comment.userId) !== String(userId)) {
+            return res.status(400).send({message:"You can't delete this comment"});
+        }
+
+        await deleteCommentService(idNews, idComment, userId);
+
         res.send({message: "Comment successfully removed"});
-    }catch (err){
-        res.status(500).send({message:err.message})
+    } catch (err) {
+        res.status(500).send({message:err.message});
     }
 }
