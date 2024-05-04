@@ -3,6 +3,8 @@ import jwt from 'jsonwebtoken'
 
 const loginService = (email) =>  User.findOne({email: email}).select("+password");
 
-const generateToken = (id) => jwt.sign({id: id}, process.env.SECRET_JWT, {expiresIn: 86400});
+const generateToken = (user) => {
+    return jwt.sign({ id: user._id, username: user.username }, process.env.SECRET_JWT, { expiresIn: '24h' });
+  };
 
 export {loginService, generateToken};
