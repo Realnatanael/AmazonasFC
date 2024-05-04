@@ -13,7 +13,7 @@ import {
     addComment,
     deleteComment,
  } from "../controllers/news.controller.js";
-import { authMiddleware } from "../middllewares/auth.middlewares.js";
+import { authMiddleware } from "../middlewares/auth.middlewares.js";
 
 router.post("/create", authMiddleware, create)
 router.get("/", findAll)
