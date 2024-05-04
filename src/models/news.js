@@ -28,6 +28,13 @@ const NewsSchema = new mongoose.Schema({
     },
     comments:{
         type: Array,
+        of: {
+            idComment: String,
+            userId: mongoose.Schema.Types.ObjectId,
+            username: String,
+            comment: String,
+            createdAt: Date,
+        },
         require: true,
     }
 });

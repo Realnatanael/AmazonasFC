@@ -1,4 +1,5 @@
 import News from '../models/news.js'
+import userService from './user.service.js';
 
 export const createService = (body) => News.create(body);
 
@@ -29,13 +30,14 @@ export const deleteLikeNewsService = (idNews, userId) => News.findOneAndUpdate(
     {_id: idNews}, {$pull: {likes: {userId}}}
 );
 
-export const addCommentService = (idNews, comment, userId) => {
+export const addCommentService = async (idNews, comment, userId) => {
     const idComment = Math.floor(Date.now() * Math.random()).toString(36);
+    const user = await userService.findByIdService(userId);
+    const username = user.username;
 
     return News.findOneAndUpdate({_id: idNews},
-        {$push: {comments: {idComment, userId, comment, ceatedAt: new Date()},
-        },
-    });
-}
+        {$push: {comments: {idComment, userId, username, comment, createdAt: new Date()}}},
+    );
+};
  
 export const deleteCommentService = (idNews, idComment, userId) => News.findOneAndUpdate({_id: idNews}, {$pull: {comments: {idComment, userId}}})
