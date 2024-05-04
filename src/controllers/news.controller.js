@@ -272,10 +272,15 @@ export const addComment = async (req, res) => {
             return res.status(400).send({message: "Write a message to comment"})
         }
 
-        await addCommentService(id, comment, userId);
+        const newComment = await addCommentService(id, comment, userId);
 
-        res.send({message: "Comment successfully completed"});
-    }catch (err){ res.status(500).send({message: err.message})}
+        res.send({
+            message: "Comment successfully completed",
+            comment: newComment // Adicionando o comentário à resposta
+        });
+    }catch (err){ 
+        res.status(500).send({message: err.message})
+    }
 }
 
 export const deleteComment = async (req, res) => {

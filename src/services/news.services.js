@@ -35,9 +35,15 @@ export const addCommentService = async (idNews, comment, userId) => {
     const user = await userService.findByIdService(userId);
     const username = user.username;
 
-    return News.findOneAndUpdate({_id: idNews},
-        {$push: {comments: {idComment, userId, username, comment, createdAt: new Date()}}},
+    const updatedNews = await News.findOneAndUpdate(
+        { _id: idNews },
+        { $push: { comments: { idComment, userId, username, comment, createdAt: new Date() } } },
+        { new: true } // Retorna o documento após a atualização
     );
+
+    // Encontre o novo comentário no array de comentários
+    const newComment = updatedNews.comments.find(comment => comment.idComment === idComment);
+
+    return newComment;
 };
- 
 export const deleteCommentService = (idNews, idComment, userId) => News.findOneAndUpdate({_id: idNews}, {$pull: {comments: {idComment, userId}}})
