@@ -11,7 +11,8 @@ import {
     likeNewsService, 
     deleteLikeNewsService, 
     addCommentService,
-    deleteCommentService
+    deleteCommentService,
+    isLikedService
 } from "../services/news.services.js"
 import News from '../models/news.js'
 
@@ -303,6 +304,23 @@ export const deleteComment = async (req, res) => {
         await deleteCommentService(idNews, idComment, userId);
 
         res.send({message: "Comment successfully removed"});
+    } catch (err) {
+        res.status(500).send({message:err.message});
+    }
+}
+
+export const isLiked = async (req, res) => {
+    try {
+        const {id} = req.params;
+        const userId = req.userId;
+
+        const liked = await isLikedService(id, userId);
+
+        if (!liked) {
+            return res.send({liked: false});
+        }
+
+        res.send({liked: true});
     } catch (err) {
         res.status(500).send({message:err.message});
     }

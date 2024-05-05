@@ -12,6 +12,7 @@ import {
     likeNews, 
     addComment,
     deleteComment,
+    isLiked
  } from "../controllers/news.controller.js";
 import { authMiddleware } from "../middlewares/auth.middlewares.js";
 
@@ -26,5 +27,6 @@ router.delete("/:id", authMiddleware, erase);
 router.patch("/like/:id", authMiddleware, likeNews);
 router.post("/comment/:id", authMiddleware, addComment);
 router.delete("/comment/:idNews/:idComment", authMiddleware, deleteComment);
+router.get("/isLiked/:id", authMiddleware, isLiked);
 
 export default router;

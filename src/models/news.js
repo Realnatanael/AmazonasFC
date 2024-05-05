@@ -24,7 +24,11 @@ const NewsSchema = new mongoose.Schema({
     },
     likes:{
         type: Array,
-        require: true,
+        of: {
+            userId: mongoose.Schema.Types.ObjectId,
+            username: String, // username do usuário que curtiu
+            token: String, // token do usuário que curtiu
+        }
     },
     comments:{
         type: Array,

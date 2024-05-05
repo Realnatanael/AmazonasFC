@@ -47,3 +47,5 @@ export const addCommentService = async (idNews, comment, userId) => {
     return newComment;
 };
 export const deleteCommentService = (idNews, idComment, userId) => News.findOneAndUpdate({_id: idNews}, {$pull: {comments: {idComment, userId}}})
+
+export const isLikedService = (idNews, userId) => News.findOne({_id: idNews, "likes.userId": userId});
