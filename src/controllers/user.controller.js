@@ -63,7 +63,7 @@ const update = async (req, res) => {
 
         const {id, user} = req;
 
-        await userService.updateService(
+        const updatedUser = await userService.updateService(
             id,
             name, 
             username, 
@@ -72,6 +72,10 @@ const update = async (req, res) => {
             avatar, 
             background  
         );
+
+        if (!updatedUser) {
+            return res.status(500).send({message: "Failed to update user"});
+        }
 
         res.send({message: "User successfully updated!"});
     } catch (err) {
