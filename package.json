@@ -8,7 +8,7 @@
   },
   "scripts": {
     "start": "node index.js",
-    "dev": "nodemon index"
+    "dev": "nodemon ./src/index.js"
   },
   "author": "Natanael",
   "license": "ISC",
