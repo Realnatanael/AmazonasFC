@@ -14,6 +14,9 @@ const app = express();
 connectDatabase();
 app.use(cors());
 app.use(express.json());
+app.get("/", (req, res) => {
+    res.send("Hello, world!");
+  });
 app.use("/user", userRoute);
 app.use("/auth", authRoute);
 app.use("/news", newsRoute);
