@@ -13,12 +13,17 @@ const app = express();
 
 connectDatabase();
 
-const corsOptions = {
-  origin: 'http://localhost:5173',
-  optionsSuccessStatus: 200
-}
+// Adicione este bloco de código logo após a inicialização do aplicativo express
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+  if (req.method === 'OPTIONS') {
+    res.header('Access-Control-Allow-Methods', 'PUT, POST, PATCH, DELETE, GET');
+    return res.status(200).json({});
+  }
+  next();
+});
 
-app.use(cors(corsOptions));
 app.use(express.json());
 app.use("/user", userRoute);
 app.use("/auth", authRoute);
