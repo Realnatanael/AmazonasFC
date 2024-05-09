@@ -1,5 +1,5 @@
-import cors from 'cors';
 import express from 'express';
+import cors from 'cors';
 import connectDatabase from './database/db.js';
 import dotenv from "dotenv";
 
@@ -20,6 +20,9 @@ app.use((req, res, next) => {
     next();
 });
 app.use(express.json());
+app.get("/", (req, res) => {
+    res.send("Hello, world!");
+  });
 app.use("/user", userRoute);
 app.use("/auth", authRoute);
 app.use("/news", newsRoute);
